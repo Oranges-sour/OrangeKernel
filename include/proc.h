@@ -1,0 +1,37 @@
+#ifndef __PROC_H__
+#define __PROC_H__
+
+#include "protect.h"
+#include "type.h"
+
+//栈帧  顺序严格不能变
+typedef struct s_stackframe {
+    u32 gs, fs, es, ds;
+    u32 edi, esi;
+    u32 ebp, kernel_ebp;
+    u32 ebx, edx, ecx, eax;
+    u32 retaddr;
+    u32 eip, cs;
+    u32 eflags, esp, ss;
+} STACK_FRAME;
+
+typedef struct s_proc {
+    STACK_FRAME regs;
+
+    u16 ldt_sel;
+
+    DESCRIPTOR ldts[LDT_SIZE];
+    u32 pid;
+    char p_name[16];
+
+} PROCESS;
+
+/* Number of tasks */
+#define NR_TASKS 1
+
+/* stacks of tasks */
+#define STACK_SIZE_TESTA 0x8000
+
+#define STACK_SIZE_TOTAL STACK_SIZE_TESTA
+
+#endif
