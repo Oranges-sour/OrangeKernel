@@ -43,6 +43,13 @@ PUBLIC void kernel_main() {
 void TaskA() {
     while (1) {
         disp_str("A");
-        delay(10);
+        delay(100);
+    }
+}
+
+void TaskB() {
+    while (1) {
+        disp_str("B");
+        delay(100);
     }
 }
