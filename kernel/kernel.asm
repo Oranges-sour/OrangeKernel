@@ -19,6 +19,7 @@ extern exception_handler
 ;i8259.c
 extern spurious_irq
 
+
 ;klib
 extern disp_str
 extern delay
@@ -29,6 +30,7 @@ extern idt_ptr
 extern p_proc_ready
 extern tss
 extern k_reenter
+extern irq_table
 
 BITS   32
 
@@ -108,90 +110,92 @@ csinit:
 ;                                   restart
 ; ====================================================================================
 restart:
-
-	call testt
-
+	
 	mov  esp,                      [p_proc_ready]
 	lldt [esp + P_LDT_SEL]
 	lea  eax,                      [esp + P_STACKTOP]
 	mov  dword [tss + TSS3_S_SP0], eax
 
+restart_reenter:
+	dec dword [k_reenter]
 	pop gs
 	pop fs
 	pop es
 	pop ds
 	popad
-
 	add esp, 4
 	iretd
+
+
+; 发生中断时保存寄存器
+save:
+	pushad
+	push ds
+	push es
+	push fs
+	push gs
+
+	mov dx, ss
+	mov ds, dx
+	mov es, dx
+
+	mov eax, esp
+
+	inc byte [gs:0]
+
+	inc  dword [k_reenter]
+	cmp  dword [k_reenter], 0
+	jne  .1
+	mov  esp,               StackTop
+	push restart
+	; 跳转到retaddr所指向的位置
+	jmp  [eax + RETADR - P_STACKBASE]
+.1:	
+	push restart_reenter
+	; 跳转到retaddr所指向的位置
+	; 此时eax的位置在栈顶,要偏移到retaddr
+	jmp  [eax + RETADR - P_STACKBASE]
  
 
 ; 中断和异常 -- 硬件中断
 ; ---------------------------------
 %macro  hwint_master    1
-        push %1
-        call spurious_irq
-        add  esp, 4
-        hlt
+    ;发生中断，栈切换到tss表中的 esp0 位置
+	; 根据配置，esp0 指向的其实是PROCESS中的s_stackframe结构体的最高地址
+	; 处理器自动压栈
+	; u32 eip, cs;
+    ; u32 eflags, esp, ss;
+	; 此时esp指向retaddr
+	; sub  esp, 4
+	;通过call save，cpu自动将call save的下一句eip压栈，刚好占据retaddr的位置
+	; 因此也不需要 sub esp, 4 了
+	call save
+
+	in  al,            INT_M_CTLMASK
+	or  al,            (1 << %1)
+	out INT_M_CTLMASK, al
+
+	mov al,        EOI
+	out INT_M_CTL, al
+
+	sti
+	push %1
+	call [irq_table + 4 * %1]
+	pop  ecx
+	cli
+
+	in  al,            INT_M_CTLMASK
+	and al,            ~(1 << %1)
+	out INT_M_CTLMASK, al
+
+	ret
 %endmacro
 ; ---------------------------------
 
 ALIGN    16
 hwint00:    ; Interrupt routine for irq 0 (the clock).
-
-		sub esp, 4
-
-		pushad
-		push ds
-		push es
-		push fs
-		push gs
-
-		mov dx, ss
-		mov ds, dx
-		mov es, dx
-
-		inc byte [gs:0]
-
-		mov al,        EOI
-		out INT_M_CTL, al
-
-
-		inc dword [k_reenter]
-		cmp dword [k_reenter], 0
-		jne .reenter
-
-		; 加载内核栈
-		mov esp, StackTop
-
-		sti
-
-		; push clock_int_msg
-		; call disp_str
-		; add  esp, 4
-
-		; push 100
-		; call delay
-		; add  esp, 4
-
-		cli
-
-		; 还原栈
-		mov esp, [p_proc_ready]
-
-		lea eax,                      [esp + P_STACKTOP]
-		mov dword [tss + TSS3_S_SP0], eax
-.reenter:
-		dec dword [k_reenter]
-		pop gs
-		pop fs
-		pop es
-		pop ds
-		popad
-		add esp, 4
-
-		iretd
-        ; hwint_master 0
+	
+    hwint_master 0
 
 ALIGN    16
 hwint01:    ; Interrupt routine for irq 1 (keyboard)

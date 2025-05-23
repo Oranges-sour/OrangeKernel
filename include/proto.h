@@ -19,9 +19,13 @@ PUBLIC void disp_str(const char* str);
 PUBLIC void disp_color_str(const char* str, u8 color);
 PUBLIC u16 get_reg_ss();
 PUBLIC u32 get_reg_esp();
+
 //************************************* */
 
+/* main.c */
 void TaskA();
+void TaskB();
+void TaskC();
 
 /* kernel.asm */
 void restart();

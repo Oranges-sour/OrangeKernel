@@ -8,6 +8,7 @@
         "proto.h": "c",
         "klibc.h": "c",
         "proc.h": "c",
-        "global.h": "c"
+        "global.h": "c",
+        "i8259.h": "c"
     }
 }

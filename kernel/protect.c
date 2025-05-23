@@ -111,7 +111,7 @@ PRIVATE void init_idt_desc(unsigned char vec, u8 desc_type, int_handler handler,
     gate->offset_high = (base >> 16) & 0xFFFF;
 }
 
-PUBLIC void init_prot() {
+PUBLIC void init_protect() {
     init_8259A();
     // 全部初始化成中断门(没有陷阱门)
     init_idt_desc(INT_VECTOR_DIVIDE, DA_386IGate, divide_error, PRIVILEGE_KRNL);
@@ -191,16 +191,21 @@ PUBLIC void init_prot() {
 
     /* 填充 GDT 中 TSS 这个描述符 */
     memset(&tss, 0, sizeof(tss));
-    tss.ss0 = SELECTOR_KERNEL_DS;
+
     init_descriptor(&gdt[INDEX_TSS],
                     vir2phys(seg2phys(SELECTOR_KERNEL_DS), &tss),
                     sizeof(tss) - 1, DA_386TSS);
+
+    tss.ss0 = SELECTOR_KERNEL_DS;
     tss.iobase = sizeof(tss); /* 没有I/O许可位图 */
 
     /* 填充 GDT 中进程的 LDT 的描述符 */
-    init_descriptor(&gdt[INDEX_LDT_FIRST],
-                    vir2phys(seg2phys(SELECTOR_KERNEL_DS), proc_table[0].ldts),
-                    LDT_SIZE * sizeof(DESCRIPTOR) - 1, DA_LDT);
+    for (int i = 0; i < NR_TASKS; ++i) {
+        init_descriptor(
+            &gdt[INDEX_LDT_FIRST + i],
+            vir2phys(seg2phys(SELECTOR_KERNEL_DS), proc_table[i].ldts),
+            LDT_SIZE * sizeof(DESCRIPTOR) - 1, DA_LDT);
+    }
 }
 
 /*

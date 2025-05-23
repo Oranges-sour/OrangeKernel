@@ -12,4 +12,7 @@ void disp_int(int val);
 
 void delay(int time);
 
+void enable_irq(int irq);
+void disable_irq(int irq);
+
 #endif

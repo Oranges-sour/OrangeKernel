@@ -3,7 +3,7 @@
 
 #include "type.h"
 
-void init_prot();
+void init_protect();
 
 typedef struct s_descriptor {
     u16 limit_low;

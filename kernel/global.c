@@ -1,6 +1,7 @@
 #include "const.h"
 #include "proc.h"
 #include "protect.h"
+#include "proto.h"
 #include "type.h"
 
 PUBLIC u32 disp_pos;
@@ -18,6 +19,13 @@ PUBLIC TSS tss;
 PUBLIC PROCESS* p_proc_ready;
 
 PUBLIC PROCESS proc_table[NR_TASKS];
+
 PUBLIC char task_stack[STACK_SIZE_TOTAL];
 
+PUBLIC irq_handler irq_table[NR_IRQ];
+
 PUBLIC i32 k_reenter;
+
+PUBLIC TASK task_table[NR_TASKS] = {{TaskA, STACK_SIZE_TESTA, "TaskA"},
+                                    {TaskB, STACK_SIZE_TESTB, "TaskB"},
+                                    {TaskC, STACK_SIZE_TESTC, "TaskC"}};

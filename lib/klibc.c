@@ -29,3 +29,19 @@ void delay(int time) {
         }
     }
 }
+
+void disable_irq(int irq) {
+    if (irq < 8) {
+        out_byte(INT_M_CTLMASK, in_byte(INT_M_CTLMASK) | (1 << irq));
+        return;
+    }
+    out_byte(INT_S_CTLMASK, in_byte(INT_S_CTLMASK) | (1 << irq));
+}
+
+void enable_irq(int irq) {
+    if (irq < 8) {
+        out_byte(INT_M_CTLMASK, in_byte(INT_M_CTLMASK) & ~(1 << irq));
+        return;
+    }
+    out_byte(INT_S_CTLMASK, in_byte(INT_S_CTLMASK) & ~(1 << irq));
+}

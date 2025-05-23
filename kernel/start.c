@@ -22,22 +22,22 @@ PUBLIC void cstart() {
     *p_idt_limit = IDT_SIZE * sizeof(GATE) - 1;
     *p_idt_base = (u32)&idt;
 
-    init_prot();
+    init_protect();
 
     set_disp_pos(0, 0);
     disp_str("cstart  ends");
 }
 
 PUBLIC void testt() {
-    disp_str("now ss esp:");
-    u16 ss;
-    u32 esp;
-    ss = get_reg_ss();
-    esp = get_reg_esp();
+    // disp_str("now ss esp:");
+    // u16 ss;
+    // u32 esp;
+    // ss = get_reg_ss();
+    // esp = get_reg_esp();
 
-    disp_int(ss);
+    // disp_int(ss);
 
-    disp_str(" ,");
-    disp_int(esp);
-    disp_str(".");
+    // disp_str(" ,");
+    // disp_int(esp);
+    // disp_str(".");
 }
