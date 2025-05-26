@@ -7,5 +7,4 @@ PUBLIC void init_8259A();
 
 void put_irq_handler(int irq, irq_handler handler);
 
-
 #endif

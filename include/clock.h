@@ -3,4 +3,6 @@
 
 void clock_handler(int irq);
 
+void milli_delay(int milli_sec);
+
 #endif

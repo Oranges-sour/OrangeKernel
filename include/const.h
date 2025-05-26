@@ -37,4 +37,17 @@
 
 #define NR_IRQ 16
 
+#define TIMER0 0x40
+#define TIMER_MODE 0x43
+#define RATE_GENERATOR 0x34
+
+#define TIMER_FREQ 1193182L
+
+/*
+Hz数不得小于 19Hz
+因为计数器是16位的，最大存储值为65535
+TIMER_FREQ / 65535 ≈ 18.2 Hz
+*/
+#define TIMER_HZ 100
+
 #endif

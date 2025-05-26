@@ -22,6 +22,8 @@ PUBLIC u32 get_reg_esp();
 
 // proc.c
 PUBLIC int sys_get_ticks();
+PUBLIC void schedule();
+
 // kernel.asm
 PUBLIC void sys_call();
 // syscall.asm
