@@ -37,4 +37,6 @@ extern TASK task_table[];
 // 中断处理函数表
 extern irq_handler irq_table[];
 
+extern int ticks;
+
 #endif

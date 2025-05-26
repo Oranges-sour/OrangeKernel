@@ -57,6 +57,8 @@ void hwint13();
 void hwint14();
 void hwint15();
 
+void sys_call();
+
 void init_descriptor(DESCRIPTOR* p_desc, u32 base, u32 limit, u16 attribute);
 PUBLIC u32 seg2phys(u16 seg);
 
@@ -188,6 +190,9 @@ PUBLIC void init_protect() {
     init_idt_desc(INT_VECTOR_IRQ8 + 6, DA_386IGate, hwint14, PRIVILEGE_KRNL);
 
     init_idt_desc(INT_VECTOR_IRQ8 + 7, DA_386IGate, hwint15, PRIVILEGE_KRNL);
+
+    // 系统调用中断
+    init_idt_desc(INT_VECTOR_SYS_CALL, DA_386IGate, sys_call, PRIVILEGE_USER);
 
     /* 填充 GDT 中 TSS 这个描述符 */
     memset(&tss, 0, sizeof(tss));

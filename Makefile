@@ -12,19 +12,19 @@ ENTRYOFFSET	=   0x400
 
 # Programs, flags, etc.
 ASM		= nasm
-DASM		= ndisasm
+DASM		= objdump
 CC		= gcc
 LD		= ld
 ASMBFLAGS	= -I boot/include/
 ASMKFLAGS	= -I include/ -f elf
 CFLAGS		= -m32 -g -I include/ -c -fno-builtin -fno-stack-protector
-LDFLAGS		= -m elf_i386 -s -Ttext $(ENTRYPOINT)
-DASMFLAGS	= -u -o $(ENTRYPOINT) -e $(ENTRYOFFSET)
+LDFLAGS		= -m elf_i386 -Ttext $(ENTRYPOINT)
+DASMFLAGS	= -d -M intel
 
 # This Program
 ORANGESBOOT	= boot/boot.bin boot/loader.bin
 ORANGESKERNEL	= kernel.bin
-OBJS		= kernel/kernel.o kernel/start.o kernel/main.o kernel/clock.o kernel/i8259.o kernel/global.o kernel/protect.o lib/kliba.o lib/stringa.o lib/stringc.o lib/klibc.o
+OBJS		= kernel/kernel.o kernel/syscall.o kernel/proc.o kernel/start.o kernel/main.o kernel/clock.o kernel/i8259.o kernel/global.o kernel/protect.o lib/kliba.o lib/stringa.o lib/stringc.o lib/klibc.o
 DASMOUTPUT	= kernel.bin.asm
 
 # All Phony Targets
@@ -69,6 +69,9 @@ $(ORANGESKERNEL) : $(OBJS)
 kernel/kernel.o : kernel/kernel.asm
 	$(ASM) $(ASMKFLAGS) -o $@ $<
 
+kernel/syscall.o : kernel/syscall.asm
+	$(ASM) $(ASMKFLAGS) -o $@ $<
+
 kernel/start.o: kernel/start.c include/const.h \
  include/klibc.h include/type.h include/protect.h include/type.h \
  include/proto.h include/const.h include/string.h include/global.h \
@@ -96,6 +99,11 @@ kernel/protect.o: kernel/protect.c /usr/include/stdc-predef.h include/protect.h 
 kernel/main.o: kernel/main.c /usr/include/stdc-predef.h include/const.h \
  include/klibc.h include/type.h include/proto.h include/const.h \
  include/string.h include/type.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+kernel/proc.o: kernel/proc.c /usr/include/stdc-predef.h include/global.h \
+ include/const.h include/proc.h include/protect.h include/type.h \
+ include/klibc.h include/proto.h include/string.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 lib/klibc.o: lib/klibc.c /usr/include/stdc-predef.h include/klibc.h \

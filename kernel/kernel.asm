@@ -31,6 +31,7 @@ extern p_proc_ready
 extern tss
 extern k_reenter
 extern irq_table
+extern sys_call_table
 
 BITS   32
 
@@ -45,6 +46,7 @@ StackTop:
 
 global     _start                ; 导出 _start
 global     restart
+global     sys_call
 
 global     divide_error
 global     single_step_exception
@@ -139,7 +141,7 @@ save:
 	mov ds, dx
 	mov es, dx
 
-	mov eax, esp
+	mov esi, esp
 
 	inc byte [gs:0]
 
@@ -149,13 +151,24 @@ save:
 	mov  esp,               StackTop
 	push restart
 	; 跳转到retaddr所指向的位置
-	jmp  [eax + RETADR - P_STACKBASE]
+	jmp  [esi + RETADR - P_STACKBASE]
 .1:	
 	push restart_reenter
 	; 跳转到retaddr所指向的位置
-	; 此时eax的位置在栈顶,要偏移到retaddr
-	jmp  [eax + RETADR - P_STACKBASE]
+	; 此时esi的位置在栈顶,要偏移到retaddr
+	jmp  [esi + RETADR - P_STACKBASE]
  
+ sys_call:
+	call save
+
+	sti
+
+	call [sys_call_table + eax * 4]
+	mov  [esi + EAXREG - P_STACKBASE], eax
+	
+	cli
+
+	ret
 
 ; 中断和异常 -- 硬件中断
 ; ---------------------------------

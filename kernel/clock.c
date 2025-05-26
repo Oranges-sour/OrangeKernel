@@ -4,8 +4,11 @@
 #include "string.h"
 
 void clock_handler(int irq) {
-    disp_str("#");
+    // disp_str("#");
     static u32 cnt = 0;
+
+    ticks++;
+
     // 中断重入的情况
     if (k_reenter != 0) {
         disp_str("!");

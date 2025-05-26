@@ -9,6 +9,7 @@
         "klibc.h": "c",
         "proc.h": "c",
         "global.h": "c",
-        "i8259.h": "c"
+        "i8259.h": "c",
+        "protect.h": "c"
     }
 }

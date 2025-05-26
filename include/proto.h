@@ -20,6 +20,13 @@ PUBLIC void disp_color_str(const char* str, u8 color);
 PUBLIC u16 get_reg_ss();
 PUBLIC u32 get_reg_esp();
 
+// proc.c
+PUBLIC int sys_get_ticks();
+// kernel.asm
+PUBLIC void sys_call();
+// syscall.asm
+PUBLIC int get_ticks();
+
 //************************************* */
 
 /* main.c */

@@ -13,6 +13,7 @@ PUBLIC void kernel_main() {
     disp_str("kernel_main");
 
     k_reenter = 0;
+    ticks = 0;
 
     put_irq_handler(0, clock_handler);
     enable_irq(0);
@@ -49,13 +50,13 @@ PUBLIC void kernel_main() {
     disp_str("on restart");
     restart();
 
-    while (1) {
-    }
+    while (1) {}
 }
 
 void TaskA() {
     while (1) {
         disp_str("A");
+        disp_int(get_ticks());
         delay(100);
     }
 }

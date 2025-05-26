@@ -29,3 +29,7 @@ PUBLIC i32 k_reenter;
 PUBLIC TASK task_table[NR_TASKS] = {{TaskA, STACK_SIZE_TESTA, "TaskA"},
                                     {TaskB, STACK_SIZE_TESTB, "TaskB"},
                                     {TaskC, STACK_SIZE_TESTC, "TaskC"}};
+
+PUBLIC system_call sys_call_table[NR_SYS_CALL] = {sys_get_ticks};
+
+PUBLIC int ticks;
