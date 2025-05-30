@@ -13,6 +13,10 @@ void disp_int(int val);
 void delay(int time);
 
 void enable_irq(int irq);
+
 void disable_irq(int irq);
+
+int min(int a, int b);
+int max(int a, int b);
 
 #endif

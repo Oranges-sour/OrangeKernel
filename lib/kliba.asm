@@ -14,8 +14,11 @@ global disp_str
 global disp_color_str
 global out_byte
 global in_byte
+global disable_int
+global enable_int
 global get_reg_ss
 global get_reg_esp
+
 ; ========================================================================
 ;                  void disp_str(char * info);
 ; ========================================================================
@@ -134,6 +137,14 @@ in_byte:
 	in  al,  dx
 	nop
 	nop
+	ret
+
+disable_int:
+	cli
+	ret
+
+enable_int:
+	sti
 	ret
 
 ; u16 get_reg_ss();

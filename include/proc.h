@@ -32,20 +32,27 @@ typedef struct s_proc {
 typedef struct s_task {
     task_f initial_eip;
     int stacksize;
+    int priority;
     char name[32];
 } TASK;
 
 /* Number of tasks */
-#define NR_TASKS 3
+#define NR_TASKS 4
 
 /* stacks of tasks */
 #define STACK_SIZE_TESTA 0x8000
 #define STACK_SIZE_TESTB 0x8000
 #define STACK_SIZE_TESTC 0x8000
+#define STACK_SIZE_TASK_TTY 0x8000
 
-#define STACK_SIZE_TOTAL \
-    (STACK_SIZE_TESTA + STACK_SIZE_TESTB + STACK_SIZE_TESTC)
+#define STACK_SIZE_TOTAL                                      \
+    (STACK_SIZE_TESTA + STACK_SIZE_TESTB + STACK_SIZE_TESTC + \
+     STACK_SIZE_TASK_TTY)
 
 #define NR_SYS_CALL 1
+
+#define TASK_PRIORITY_LOW 10
+#define TASK_PRIORITY_MEDIUM 15
+#define TASK_PRIORITY_HIGH 20
 
 #endif

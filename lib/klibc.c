@@ -45,3 +45,16 @@ void enable_irq(int irq) {
     }
     out_byte(INT_S_CTLMASK, in_byte(INT_S_CTLMASK) & ~(1 << irq));
 }
+
+int min(int a, int b) {
+    if (a < b) {
+        return a;
+    }
+    return b;
+}
+int max(int a, int b) {
+    if (a > b) {
+        return a;
+    }
+    return b;
+}

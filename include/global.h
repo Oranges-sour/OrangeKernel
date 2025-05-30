@@ -1,9 +1,11 @@
 #ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
+#include "console.h"
 #include "const.h"
 #include "proc.h"
 #include "protect.h"
+#include "tty.h"
 #include "type.h"
 
 extern u32 disp_pos;
@@ -38,5 +40,11 @@ extern TASK task_table[];
 extern irq_handler irq_table[];
 
 extern int ticks;
+
+extern TTY tty_table[];
+
+extern CONSOLE console_table[];
+
+extern int nr_current_console;
 
 #endif

@@ -15,6 +15,8 @@ enum str_color {
 // kliba.asm
 PUBLIC void out_byte(u16 port, u8 val);
 PUBLIC u8 in_byte(u16 port);
+PUBLIC void disable_int();
+PUBLIC void enable_int();
 PUBLIC void disp_str(const char* str);
 PUBLIC void disp_color_str(const char* str, u8 color);
 PUBLIC u16 get_reg_ss();

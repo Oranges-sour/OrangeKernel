@@ -24,7 +24,7 @@ DASMFLAGS	= -d -M intel
 # This Program
 ORANGESBOOT	= boot/boot.bin boot/loader.bin
 ORANGESKERNEL	= kernel.bin
-OBJS		= kernel/kernel.o kernel/syscall.o kernel/proc.o kernel/start.o kernel/main.o kernel/clock.o kernel/i8259.o kernel/global.o kernel/protect.o lib/kliba.o lib/stringa.o lib/stringc.o lib/klibc.o
+OBJS		= kernel/kernel.o kernel/syscall.o kernel/console.o kernel/keyboard.o kernel/tty.o kernel/proc.o kernel/start.o kernel/main.o kernel/clock.o kernel/i8259.o kernel/global.o kernel/protect.o lib/kliba.o lib/stringa.o lib/stringc.o lib/klibc.o
 DASMOUTPUT	= kernel.bin.asm
 
 # All Phony Targets
@@ -73,6 +73,24 @@ kernel/syscall.o : kernel/syscall.asm
 	$(ASM) $(ASMKFLAGS) -o $@ $<
 
 kernel/start.o: kernel/start.c include/const.h \
+ include/klibc.h include/type.h include/protect.h include/type.h \
+ include/proto.h include/const.h include/string.h include/global.h \
+ include/protect.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+kernel/keyboard.o: kernel/keyboard.c include/const.h \
+ include/klibc.h include/type.h include/protect.h include/type.h \
+ include/proto.h include/const.h include/string.h include/global.h \
+ include/protect.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+kernel/tty.o: kernel/tty.c include/const.h \
+ include/klibc.h include/type.h include/protect.h include/type.h \
+ include/proto.h include/const.h include/string.h include/global.h \
+ include/protect.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+kernel/console.o: kernel/console.c include/const.h \
  include/klibc.h include/type.h include/protect.h include/type.h \
  include/proto.h include/const.h include/string.h include/global.h \
  include/protect.h

@@ -1,7 +1,9 @@
+#include "console.h"
 #include "const.h"
 #include "proc.h"
 #include "protect.h"
 #include "proto.h"
+#include "tty.h"
 #include "type.h"
 
 PUBLIC u32 disp_pos;
@@ -26,10 +28,18 @@ PUBLIC irq_handler irq_table[NR_IRQ];
 
 PUBLIC i32 k_reenter;
 
-PUBLIC TASK task_table[NR_TASKS] = {{TaskA, STACK_SIZE_TESTA, "TaskA"},
-                                    {TaskB, STACK_SIZE_TESTB, "TaskB"},
-                                    {TaskC, STACK_SIZE_TESTC, "TaskC"}};
+PUBLIC TASK task_table[NR_TASKS] = {
+    {TaskA, STACK_SIZE_TESTA, TASK_PRIORITY_MEDIUM, "TaskA"},
+    {TaskB, STACK_SIZE_TESTB, TASK_PRIORITY_MEDIUM, "TaskB"},
+    {TaskC, STACK_SIZE_TESTC, TASK_PRIORITY_MEDIUM, "TaskC"},
+    {task_tty, STACK_SIZE_TASK_TTY, TASK_PRIORITY_HIGH, "task_tty"}};
 
 PUBLIC system_call sys_call_table[NR_SYS_CALL] = {sys_get_ticks};
 
 PUBLIC int ticks;
+
+PUBLIC TTY tty_table[NR_CONSOLES];
+
+PUBLIC CONSOLE console_table[NR_CONSOLES];
+
+PUBLIC int nr_current_console;

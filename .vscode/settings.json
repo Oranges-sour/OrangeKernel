@@ -10,6 +10,8 @@
         "proc.h": "c",
         "global.h": "c",
         "i8259.h": "c",
-        "protect.h": "c"
+        "protect.h": "c",
+        "keyboard.h": "c",
+        "console.h": "c"
     }
 }
