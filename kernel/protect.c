@@ -205,7 +205,7 @@ PUBLIC void init_protect() {
     tss.iobase = sizeof(tss); /* 没有I/O许可位图 */
 
     /* 填充 GDT 中进程的 LDT 的描述符 */
-    for (int i = 0; i < NR_TASKS; ++i) {
+    for (int i = 0; i < NR_TASKS + NR_PROCS; ++i) {
         init_descriptor(
             &gdt[INDEX_LDT_FIRST + i],
             vir2phys(seg2phys(SELECTOR_KERNEL_DS), proc_table[i].ldts),

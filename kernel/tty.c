@@ -82,7 +82,7 @@ PUBLIC void keyboard_process(TTY* p_tty, u32 key) {
         }
         return;
     }
-    if (((key & FLAG_CTRL_L) || (key & FLAG_CTRL_L)) &&
+    if (((key & FLAG_CTRL_L) || (key & FLAG_CTRL_R)) &&
         (raw_code >= '1' && raw_code <= '9')) {
         select_console(raw_code - '0' - 1);
         return;

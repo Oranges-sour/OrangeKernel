@@ -122,7 +122,6 @@ PUBLIC void keyboard_read(TTY* tty) {
         for (int i = 0; i < 9; ++i) {
             if (key == func_key[i]) {
                 kb_state[i] = make;
-                key = 0;
                 break;
             }
         }

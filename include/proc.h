@@ -27,6 +27,8 @@ typedef struct s_proc {
     u32 pid;
     char p_name[32];
 
+    int nr_tty;
+
 } PROCESS;
 
 typedef struct s_task {
@@ -37,7 +39,8 @@ typedef struct s_task {
 } TASK;
 
 /* Number of tasks */
-#define NR_TASKS 4
+#define NR_TASKS 1
+#define NR_PROCS 3
 
 /* stacks of tasks */
 #define STACK_SIZE_TESTA 0x8000

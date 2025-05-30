@@ -33,57 +33,77 @@ PRIVATE void init_globals() {
     ticks = 0;
 }
 
-
 PRIVATE void init_tasks() {
     int stack_now = STACK_SIZE_TOTAL;
-    for (int i = 0; i < NR_TASKS; ++i) {
+    for (int i = 0; i < NR_TASKS + NR_PROCS; ++i) {
+        u8 privilege;
+        u8 rpl;
+        int eflags;
+        TASK* task;
+        if (i < NR_TASKS) {
+            privilege = PRIVILEGE_TASK;
+            rpl = RPL_TASK;
+            eflags = 0x1202;
+            task = &task_table[i];
+        } else {
+            privilege = PRIVILEGE_USER;
+            rpl = RPL_USER;
+            eflags = 0x202;
+            task = &user_proc_table[i - NR_TASKS];
+        }
+
         PROCESS* p_proc = &proc_table[i];
 
         p_proc->ldt_sel = SELECTOR_LDT_FIRST + i * 8;
         memcpy(&p_proc->ldts[0], &gdt[INDEX_FLAT_C], sizeof(DESCRIPTOR));
-        p_proc->ldts[0].attr1 = DA_C | PRIVILEGE_TASK << 5;  // change the DPL
+        p_proc->ldts[0].attr1 = DA_C | privilege << 5;  // change the DPL
         memcpy(&p_proc->ldts[1], &gdt[INDEX_FLAT_RW], sizeof(DESCRIPTOR));
-        p_proc->ldts[1].attr1 = DA_DRW | PRIVILEGE_TASK << 5;  // change the DPL
+        p_proc->ldts[1].attr1 = DA_DRW | privilege << 5;  // change the DPL
 
-        p_proc->regs.cs = (0 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | RPL_TASK;
-        p_proc->regs.ds = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | RPL_TASK;
-        p_proc->regs.es = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | RPL_TASK;
-        p_proc->regs.fs = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | RPL_TASK;
-        p_proc->regs.ss = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | RPL_TASK;
+        p_proc->regs.cs = (0 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | rpl;
+        p_proc->regs.ds = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | rpl;
+        p_proc->regs.es = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | rpl;
+        p_proc->regs.fs = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | rpl;
+        p_proc->regs.ss = (8 & SA_RPL_MASK & SA_TI_MASK) | SA_TIL | rpl;
 
-        p_proc->regs.gs = (SELECTOR_KERNEL_GS & SA_RPL_MASK) | RPL_TASK;
-        p_proc->regs.eip = (u32)(task_table[i].initial_eip);
+        p_proc->regs.gs = (SELECTOR_KERNEL_GS & SA_RPL_MASK) | rpl;
+        p_proc->regs.eip = (u32)(task->initial_eip);
         p_proc->regs.esp = (u32)task_stack + stack_now;
-        p_proc->regs.eflags = 0x1202;  // IF=1, IOPL=1, bit 2 is always 1.
+        p_proc->regs.eflags = eflags;
 
-        p_proc->ticks = p_proc->priority = task_table[i].priority;
+        p_proc->ticks = p_proc->priority = task->priority;
         p_proc->pid = i;
-        strcpy(p_proc->p_name, task_table[i].name);
+        p_proc->nr_tty = 0;
+        strcpy(p_proc->p_name, task->name);
 
         // 切换到下一个进程的栈
-        stack_now -= task_table[i].stacksize;
+        stack_now -= task->stacksize;
     }
+
+    proc_table[1].nr_tty = 0;
+    proc_table[2].nr_tty = 1;
+    proc_table[3].nr_tty = 1;
 
     p_proc_ready = &proc_table[0];
 }
 
 void TaskA() {
     while (1) {
-        //disp_str("A");
+        disp_str("A");
         milli_delay(10000);
     }
 }
 
 void TaskB() {
     while (1) {
-        //disp_str("B");
+        // disp_str("B");
         milli_delay(10000);
     }
 }
 
 void TaskC() {
     while (1) {
-        //disp_str("C");
+        // disp_str("C");
         milli_delay(10000);
     }
 }

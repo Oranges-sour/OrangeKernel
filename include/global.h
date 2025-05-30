@@ -35,6 +35,7 @@ extern char task_stack[];
 
 // 任务表
 extern TASK task_table[];
+extern TASK user_proc_table[];
 
 // 中断处理函数表
 extern irq_handler irq_table[];

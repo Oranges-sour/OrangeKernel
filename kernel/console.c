@@ -72,9 +72,14 @@ PUBLIC void out_char(CONSOLE* con, char ch) {
             scroll_screen(con, SCR_DN);
         }
     } else if (ch == '\b') {
-        //退格，删除光标之前的一项
-        if(con->cursor - 1 >= con->original_addr) {
-            
+        // 退格，删除光标之前的一项
+        if (con->cursor - 1 >= con->original_addr) {
+            *(p_vmem - 1) = DEFAULT_CHAR_COLOR;
+            *(p_vmem - 2) = ' ';
+            con->cursor -= 1;
+            if (con->cursor < con->current_start_addr) {
+                scroll_screen(con, SCR_UP);
+            }
         }
     } else {
         *p_vmem = ch;
@@ -85,7 +90,7 @@ PUBLIC void out_char(CONSOLE* con, char ch) {
         con->cursor += 1;
     }
 
-    disp_pos = (u32)p_vmem;
+    disp_pos = (u32)p_vmem - V_MEM_BASE;
     set_cursor(con->cursor);
 }
 
