@@ -24,7 +24,7 @@ DASMFLAGS	= -d -M intel
 # This Program
 ORANGESBOOT	= boot/boot.bin boot/loader.bin
 ORANGESKERNEL	= kernel.bin
-OBJS		= kernel/kernel.o kernel/syscall.o kernel/console.o kernel/keyboard.o kernel/tty.o kernel/proc.o kernel/start.o kernel/main.o kernel/clock.o kernel/i8259.o kernel/global.o kernel/protect.o lib/kliba.o lib/stringa.o lib/stringc.o lib/klibc.o
+OBJS		= kernel/kernel.o kernel/syscall.o kernel/printf.o kernel/console.o kernel/keyboard.o kernel/tty.o kernel/process.o kernel/start.o kernel/main.o kernel/clock.o kernel/i8259.o kernel/global.o kernel/protect.o lib/kliba.o lib/stringa.o lib/stringc.o lib/klibc.o
 DASMOUTPUT	= kernel.bin.asm
 
 # All Phony Targets
@@ -96,12 +96,18 @@ kernel/console.o: kernel/console.c include/const.h \
  include/protect.h
 	$(CC) $(CFLAGS) -o $@ $<
 
+kernel/printf.o: kernel/printf.c include/const.h \
+ include/klibc.h include/type.h include/protect.h include/type.h \
+ include/proto.h include/const.h include/string.h include/global.h \
+ include/protect.h
+	$(CC) $(CFLAGS) -o $@ $<
+
 kernel/i8259.o: kernel/i8259.c include/const.h \
  include/proto.h include/const.h include/type.h include/type.h include/protect.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 kernel/clock.o: kernel/clock.c /usr/include/stdc-predef.h include/global.h \
- include/const.h include/proc.h include/protect.h include/type.h \
+ include/const.h include/process.h include/protect.h include/type.h \
  include/klibc.h include/proto.h include/string.h
 	$(CC) $(CFLAGS) -o $@ $<
 
@@ -119,8 +125,8 @@ kernel/main.o: kernel/main.c /usr/include/stdc-predef.h include/const.h \
  include/string.h include/type.h
 	$(CC) $(CFLAGS) -o $@ $<
 
-kernel/proc.o: kernel/proc.c /usr/include/stdc-predef.h include/global.h \
- include/const.h include/proc.h include/protect.h include/type.h \
+kernel/process.o: kernel/process.c /usr/include/stdc-predef.h include/global.h \
+ include/const.h include/process.h include/protect.h include/type.h \
  include/klibc.h include/proto.h include/string.h
 	$(CC) $(CFLAGS) -o $@ $<
 

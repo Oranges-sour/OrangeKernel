@@ -4,7 +4,8 @@
 #include "i8259.h"
 #include "keyboard.h"
 #include "klibc.h"
-#include "proc.h"
+#include "printf.h"
+#include "process.h"
 #include "protect.h"
 #include "proto.h"
 #include "string.h"
@@ -89,7 +90,7 @@ PRIVATE void init_tasks() {
 
 void TaskA() {
     while (1) {
-        disp_str("A");
+        printf("123: %d %x %s %d", 10, 32, "ooo", 5);
         milli_delay(10000);
     }
 }

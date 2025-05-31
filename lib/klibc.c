@@ -18,7 +18,7 @@ void set_disp_pos(u32 w, u32 h) {
 }
 
 void disp_int(int val) {
-    char temp[16];
+    char temp[32];
     itoa_hex(temp, val);
     disp_str(temp);
 }

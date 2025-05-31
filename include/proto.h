@@ -3,6 +3,7 @@
 
 #include "const.h"
 #include "type.h"
+#include "process.h"
 
 enum str_color {
     STR_RED = 12,
@@ -24,14 +25,16 @@ PUBLIC u32 get_reg_esp();
 
 // proc.c
 PUBLIC int sys_get_ticks();
+PUBLIC int sys_write(const char* buf, int len, PROCESS* process);
 PUBLIC void schedule();
 
 // kernel.asm
 PUBLIC void sys_call();
 // syscall.asm
 PUBLIC int get_ticks();
+PUBLIC int write(const char* buf, int len);
 
-//************************************* */
+//**************************************/
 
 /* main.c */
 void TaskA();

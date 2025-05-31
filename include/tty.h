@@ -19,6 +19,8 @@ typedef struct s_tty {
 
 void task_tty();
 
-void keyboard_process(TTY* p_tty, u32 key);
+void keyboard_process(TTY* tty, u32 key);
+
+void tty_write(TTY* tty, const char* buf, int len);
 
 #endif

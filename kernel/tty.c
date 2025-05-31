@@ -91,6 +91,12 @@ PUBLIC void keyboard_process(TTY* p_tty, u32 key) {
     tty_buf_push(p_tty, key);
 }
 
+PUBLIC void tty_write(TTY* tty, const char* buf, int len) {
+    for (int i = 0; i < len; ++i) {
+        out_char(tty->p_console, buf[i]);
+    }
+}
+
 PRIVATE void tty_buf_push(TTY* tty, u32 key) {
     if (tty->in_buf_count >= TTY_IN_BYTES) {
         return;

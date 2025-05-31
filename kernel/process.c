@@ -1,9 +1,17 @@
+#include "process.h"
+
 #include "global.h"
 #include "klibc.h"
 #include "proto.h"
 #include "string.h"
+#include "tty.h"
 
 PUBLIC int sys_get_ticks() { return ticks; }
+
+PUBLIC int sys_write(const char* buf, int len, PROCESS* process) {
+    tty_write(&tty_table[process->nr_tty], buf, len);
+    return 0;
+}
 
 PUBLIC void schedule() {
     int greatest_ticks = 0;

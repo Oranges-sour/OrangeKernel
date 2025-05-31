@@ -3,7 +3,7 @@
 
 #include "console.h"
 #include "const.h"
-#include "proc.h"
+#include "process.h"
 #include "protect.h"
 #include "tty.h"
 #include "type.h"

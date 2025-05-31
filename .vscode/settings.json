@@ -7,11 +7,12 @@
         "const.h": "c",
         "proto.h": "c",
         "klibc.h": "c",
-        "proc.h": "c",
+        "process.h": "c",
         "global.h": "c",
         "i8259.h": "c",
         "protect.h": "c",
         "keyboard.h": "c",
-        "console.h": "c"
+        "console.h": "c",
+        "printf.h": "c"
     }
 }

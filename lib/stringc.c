@@ -78,8 +78,11 @@ PUBLIC int strcat(char* dst, const char* src) {
     return 0;
 }
 
+
 PUBLIC int strcpy(char* dst, const char* src) {
-    memcpy((void*)dst, (void*)src, strlen(src) + 1);
+    int len = strlen(src);
+    memcpy((void*)dst, (void*)src, len + 1);
+    return len;
 }
 
 PUBLIC int strlen(const char* src) {

@@ -1,6 +1,6 @@
 #include "console.h"
 #include "const.h"
-#include "proc.h"
+#include "process.h"
 #include "protect.h"
 #include "proto.h"
 #include "tty.h"
@@ -36,7 +36,7 @@ PUBLIC TASK user_proc_table[NR_PROCS] = {
     {TaskB, STACK_SIZE_TESTB, TASK_PRIORITY_MEDIUM, "TaskB"},
     {TaskC, STACK_SIZE_TESTC, TASK_PRIORITY_MEDIUM, "TaskC"}};
 
-PUBLIC system_call sys_call_table[NR_SYS_CALL] = {sys_get_ticks};
+PUBLIC system_call sys_call_table[NR_SYS_CALL] = {sys_get_ticks, sys_write};
 
 PUBLIC int ticks;
 

@@ -1,5 +1,5 @@
-#ifndef __PROC_H__
-#define __PROC_H__
+#ifndef __PROCESS_H__
+#define __PROCESS_H__
 
 #include "protect.h"
 #include "type.h"
@@ -52,7 +52,7 @@ typedef struct s_task {
     (STACK_SIZE_TESTA + STACK_SIZE_TESTB + STACK_SIZE_TESTC + \
      STACK_SIZE_TASK_TTY)
 
-#define NR_SYS_CALL 1
+#define NR_SYS_CALL 2
 
 #define TASK_PRIORITY_LOW 10
 #define TASK_PRIORITY_MEDIUM 15
